@@ -16,7 +16,6 @@ describe('Hand component', () => {
   it('should render the hand with cards', () => {
     render(<Hand cards={cards} score={score} target={target} />);
 
-    // Check if the cards are rendered
     const cardElements = screen.getAllByTestId('card');
     expect(cardElements).toHaveLength(cards.length);
   });
@@ -24,7 +23,6 @@ describe('Hand component', () => {
   it('should render the hand without cards when given an empty array', () => {
     render(<Hand cards={[]} score={score} target={target} />);
 
-    // Check if no cards are rendered
     const cardElements = screen.queryAllByTestId('card');
     expect(cardElements).toHaveLength(0);
   });
@@ -77,28 +75,25 @@ describe('calculateScore function', () => {
 });
 
 describe('App', () => {
-  it('should not render the welcome message after betting', () => {
+  const setup = () => {
     render(<App />);
-
-    const messageElement = screen.getByText('Welcome to React Blackjack! Place your bet to begin.');
 
     const inputElement = screen.getByLabelText('Place your bet:');
     const buttonElement = screen.getByRole('button', {name: /Bet/i});
 
     fireEvent.change(inputElement, { target: { value: '30' } });
     fireEvent.click(buttonElement);
+  }
 
-    expect(messageElement).not.toBeInTheDocument();
+  it('should not render the welcome message after betting', () => {
+    setup();
+
+    const messageElement = screen.queryByText(/Welcome to React Blackjack! Place your bet to begin./i);
+    expect(messageElement).toBeNull();
   });
 
   it('should render the hand components for the player and dealer correctly', () => {
-    render(<App />);
-
-    const inputElement = screen.getByLabelText('Place your bet:');
-    const buttonElement = screen.getByRole('button', {name: /Bet/i});
-
-    fireEvent.change(inputElement, { target: { value: '30' } });
-    fireEvent.click(buttonElement);
+    setup();
 
     const dealerHand = screen.getByTestId('dealer-hand');
     const playerHand = screen.getByTestId('player-hand');
@@ -108,13 +103,7 @@ describe('App', () => {
   });
 
   it('should deal the cards in their correct sequence to player and dealer when a bet is placed', () => {
-    render(<App />);
-
-    const inputElement = screen.getByLabelText('Place your bet:');
-    const buttonElement = screen.getByRole('button', {name: /Bet/i});
-
-    fireEvent.change(inputElement, { target: { value: '30' } });
-    fireEvent.click(buttonElement);
+    setup();
 
     const dealerHand = screen.getByTestId('dealer-hand');
     const playerHand = screen.getByTestId('player-hand');
@@ -127,13 +116,7 @@ describe('App', () => {
   });
 
   it('should hide the dealer\'s hole card', () => {
-    render(<App />);
-
-    const inputElement = screen.getByLabelText('Place your bet:');
-    const buttonElement = screen.getByRole('button', {name: /Bet/i});
-
-    fireEvent.change(inputElement, { target: { value: '30' } });
-    fireEvent.click(buttonElement);
+    setup();
 
     const dealerHand = screen.getByTestId('dealer-hand');
     const hiddenCard = screen.getAllByTestId('card')[0];
@@ -142,47 +125,11 @@ describe('App', () => {
   });
 
   it('should display the player and dealer scores after the cards are dealt', () => {
-    render(<App />);
-
-    const inputElement = screen.getByLabelText('Place your bet:');
-    const buttonElement = screen.getByRole('button', {name: /Bet/i});
-
-    fireEvent.change(inputElement, { target: { value: '30' } });
-    fireEvent.click(buttonElement);
+    setup();
 
     const dealerScore = screen.getByTestId('dealer-score');
     const playerScore = screen.getByTestId('player-score');
     expect(dealerScore).toBeInTheDocument();
     expect(playerScore).toBeInTheDocument();
   });
-
-  // it('should draw cards for the user and dealer when a bet is placed', () => {
-  //   render(<App />);
-
-  //   const betInput = screen.getByTestId('bet-amount');
-  //   const betButton = screen.getByText('Bet');
-
-  //   userEvent.type(betInput, '50');
-  //   userEvent.click(betButton);
-
-  //   const dealerHand = screen.getByTestId('hand-Dealer');
-  //   const playerHand = screen.getByTestId('hand-Player');
-
-  //   expect(dealerHand.children.length).toBeGreaterThan(0);
-  //   expect(playerHand.children.length).toBeGreaterThan(0);
-  // });
-
-  // it('should update the game status to "userTurn" when a bet is placed', () => {
-  //   render(<App />);
-
-  //   const betInput = screen.getByTestId('bet-amount');
-  //   const betButton = screen.getByText('Bet');
-
-  //   userEvent.type(betInput, '50');
-  //   userEvent.click(betButton);
-
-  //   const messageElement = screen.getByText('userTurn');
-
-  //   expect(messageElement).toBeInTheDocument();
-  // });
 });
