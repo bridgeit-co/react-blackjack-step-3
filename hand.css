@@ -1,0 +1,28 @@
+.hand-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.card-container {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.card-container .card:first-of-type {
+  margin-left: 0;
+}
+
+.btn {
+  background-color: white;
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  font-size: 32px;
+  align-items: center;
+}
+
+.score {
+  color: rgba(255, 255, 255, 0.7)
+}
