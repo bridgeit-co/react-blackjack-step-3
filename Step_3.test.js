@@ -119,7 +119,7 @@ describe('App', () => {
     setup();
 
     const dealerHand = screen.getByTestId('dealer-hand');
-    const hiddenCard = screen.getAllByTestId('card')[0];
+    const hiddenCard = screen.getAllByTestId('card')[1];
     expect(dealerHand).toContainElement(hiddenCard);
     expect(hiddenCard).toHaveClass('card hiddenCard');
   });
